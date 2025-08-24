@@ -13,28 +13,28 @@ $dbname = "advocate";
 			die("Connection failed: " . $conn->connect_error);
 		}
 
-$db = mysqli_select_db($conn,advocate');
+$db = mysqli_select_db($conn,'advocate');
 
-if(isset($_POST['login'])){
-	$username = $_POST['username'];
-	$password = $_POST['password'];
-	
-	$sql = " select * from  admin where username='$username' and password='$password' ";
-	$query = mysqli_query($con,$sql);
+	if(isset($_POST['login'])){
+		$username = $_POST['username'];
+		$password = $_POST['password'];
 		
-	$row = mysqli_num_rows($query);
-	
-		if($row == 0){
-			echo "login successful";
-			$_SESSION['username'] = $username;
-	
-			header('location:dashboard.php');
-		}else{
-			echo "login failed";
-			header('location:login.php');
-		}
-
-}
+		$sql = " select * from  admin where username='$username' and password='$password' ";
+		$query = mysqli_query($con,$sql);
+			
+		$row = mysqli_num_rows($query);
 		
+			if($row == 0){
+				echo "login successful";
+				$_SESSION['username'] = $username;
+		
+				header('location:dashboard.php');
+			}else{
+				echo "login failed";
+				header('location:login.php');
+			}
 
-?>
+	}
+			
+
+	?>
