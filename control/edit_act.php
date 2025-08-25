@@ -8,7 +8,7 @@ error_reporting(0);
  
 include("../auth/header.php");
 include 'connection1.php';
-<?php include("../auth/sidebar.php");?>
+include("../auth/sidebar.php");
 
 if(isset($_POST['edit_act'])){
 	 // print_r($_POST);
@@ -65,7 +65,7 @@ if(isset($_POST['edit_act'])){
 </head>	/* <!--  Author Name- Mayuri K. 
  for any PHP, Codeignitor, Laravel OR Python work contact me at mayuri.infospace@gmail.com  
  Visit website - www.mayurik.com -->
-		} */
+		 */
 <body>
 
 <div class="page-content">

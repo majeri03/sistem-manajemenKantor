@@ -7,7 +7,7 @@ session_start();
  
 include("../auth/header.php");
 include 'connection1.php';
-<?php include("../auth/sidebar.php");?>
+include("../auth/sidebar.php");
 
 if(isset($_POST['Edit'])){
 	 // print_r($_POST);
@@ -93,7 +93,7 @@ if(isset($_POST['Edit'])){
 	/* <!--  Author Name- Mayuri K. 
  for any PHP, Codeignitor, Laravel OR Python work contact me at mayuri.infospace@gmail.com  
  Visit website - www.mayurik.com -->
-		} */
+		 */
 			
 
 <?php
