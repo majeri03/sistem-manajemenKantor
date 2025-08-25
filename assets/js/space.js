@@ -1,35 +1,26 @@
-function checkForSpace(event) {
-    // Get the entered value
-    var enteredText = event.target.value;
-    
-    // Check if the entered value contains a space
-    if (enteredText.includes(' ')) {
-        // Display alert
-        alert('Space is not allowed to entered!');
+// File: assets/js/space.js
 
-        // Empty the input field
-        event.target.value = '';
+(function() {
+    "use strict";
+
+    // Fungsi ini tetap sama, untuk mengecek spasi
+    function checkForbiddenSpaces(event) {
+        if (event.target.value.includes(' ')) {
+            alert('Spasi tidak diizinkan pada kolom ini!');
+            event.target.value = event.target.value.replace(/\s/g, '');
+        }
     }
-}
 
-// Listen to input event for typing
-document.getElementById('inputField1').addEventListener('input', function(event) {
-    checkForSpace(event);
-});
+    // Fungsi pintar untuk memasang event listener dengan aman
+    function attachListenerIfElementExists(elementId, eventType, listenerFunction) {
+        var element = document.getElementById(elementId);
+        if (element) { // Hanya pasang listener JIKA elemennya ada
+            element.addEventListener(eventType, listenerFunction);
+        }
+    }
 
-document.getElementById('inputField2').addEventListener('input', function(event) {
-    checkForSpace(event);
-});
+    // Aplikasikan pada elemen di halaman login
+    attachListenerIfElementExists('userEmail', 'input', checkForbiddenSpaces);
+    attachListenerIfElementExists('userPassword', 'input', checkForbiddenSpaces);
 
-// Listen to paste event for pasting
-document.getElementById('inputField1').addEventListener('paste', function(event) {
-    setTimeout(function() {
-        checkForSpace(event);
-    }, 0);
-});
-
-document.getElementById('inputField2').addEventListener('paste', function(event) {
-    setTimeout(function() {
-        checkForSpace(event);
-    }, 0);
-});
+})();

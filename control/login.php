@@ -1,4 +1,5 @@
 <?php
+// File: control/login.php (Versi Final Tanpa reCAPTCHA)
 session_start();
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
@@ -7,49 +8,43 @@ include 'connection1.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
 
-    if (isset($_POST['g-recaptcha-response']) && !empty($_POST['g-recaptcha-response'])) {
-        $secret_key = '6LcXEiAhAAAAALaf8ygYOebTAENC3QsvAMjXFuuB';
-        $verifyResponse = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret=' . $secret_key . '&response=' . $_POST['g-recaptcha-response']);
-        $responseData = json_decode($verifyResponse);
+    // Logika reCAPTCHA telah dihapus. Langsung ke validasi login.
+    $username = $_POST['username'];
+    $password_input = $_POST['password'];
 
-        if ($responseData->success) {
-            $username = $_POST['username'];
-            $password_input = $_POST['password'];
+    $sql = "SELECT id, username, password FROM admin WHERE username = ? LIMIT 1";
+    $stmt = $conn->prepare($sql);
 
-            $sql = "SELECT id, username, password FROM admin WHERE username = ? LIMIT 1";
-            $stmt = $conn->prepare($sql);
+    if ($stmt) {
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-            if ($stmt) {
-                $stmt->bind_param("s", $username);
-                $stmt->execute();
-                $result = $stmt->get_result();
-
-                if ($result->num_rows === 1) {
-                    $user = $result->fetch_assoc();
-                    
-                    if (password_verify($password_input, $user['password'])) {
-                        $_SESSION['username'] = $user['username'];
-                        $_SESSION['id'] = $user['id'];
-                        
-                        unset($_SESSION['login_error']);
-                        header("Location: dashboard.php");
-                    }
-                }
+        if ($result->num_rows === 1) {
+            $user = $result->fetch_assoc();
+            
+            if (password_verify($password_input, $user['password'])) {
+                // Login Berhasil
+                $_SESSION['username'] = $user['username'];
+                $_SESSION['id'] = $user['id'];
                 
-                $_SESSION['login_error'] = "Username atau Password yang Anda masukkan salah.";
-
-            } else {
-                $_SESSION['login_error'] = "Terjadi kesalahan pada sistem.";
+                unset($_SESSION['login_error']);
+                header("Location: dashboard.php");
+                exit();
             }
-            $stmt->close();
-        } else {
-            $_SESSION['login_error'] = "Verifikasi reCAPTCHA gagal. Silakan coba lagi.";
         }
+        
+        // Jika username tidak ditemukan ATAU password salah
+        $_SESSION['login_error'] = "Username atau Password yang Anda masukkan salah.";
+
     } else {
-        $_SESSION['login_error'] = "Harap verifikasi bahwa Anda bukan robot.";
+        $_SESSION['login_error'] = "Terjadi kesalahan pada sistem.";
     }
-    
+
+    $stmt->close();
     $conn->close();
+    
+    // Redirect kembali ke login untuk menampilkan error
     header("Location: login.php");
     exit();
 }
@@ -69,8 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
       <link rel="stylesheet" href="../assets/css/demo1/style.css">
       <link rel="shortcut icon" href="../assets/images/favicon.png" />
       <link rel="stylesheet" href="popup_style.css">
-      <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-   </head>
+      </head>
    <body>
       <?php
       if (isset($_SESSION['login_error'])) {
@@ -108,7 +102,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
                                  <label for="userPassword" class="form-label">Password</label>
                                  <input type="password" class="form-control" name="password" id="userPassword" autocomplete="current-password" placeholder="Password" required>
                               </div>
-                              <div class="g-recaptcha mb-4" data-sitekey="6LcXEiAhAAAAAJRpKyjYMJx0ZXIfmM1COjUj4uAe"></div>
                               <div>
                                  <input type="submit" name="login" value="Login" class="btn btn-primary w-100 me-2 mb-2 mb-md-0 text-white">
                               </div>
