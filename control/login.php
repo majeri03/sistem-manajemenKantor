@@ -1,5 +1,4 @@
 <?php
-// File: control/login.php (Versi Final Tanpa reCAPTCHA)
 session_start();
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
@@ -8,7 +7,6 @@ include 'connection1.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
 
-    // Logika reCAPTCHA telah dihapus. Langsung ke validasi login.
     $username = $_POST['username'];
     $password_input = $_POST['password'];
 
@@ -24,7 +22,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
             $user = $result->fetch_assoc();
             
             if (password_verify($password_input, $user['password'])) {
-                // Login Berhasil
                 $_SESSION['username'] = $user['username'];
                 $_SESSION['id'] = $user['id'];
                 
@@ -34,7 +31,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
             }
         }
         
-        // Jika username tidak ditemukan ATAU password salah
         $_SESSION['login_error'] = "Username atau Password yang Anda masukkan salah.";
 
     } else {
@@ -44,7 +40,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['login'])) {
     $stmt->close();
     $conn->close();
     
-    // Redirect kembali ke login untuk menampilkan error
     header("Location: login.php");
     exit();
 }

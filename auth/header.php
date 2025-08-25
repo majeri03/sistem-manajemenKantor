@@ -134,7 +134,6 @@
                         <p class="tx-16 fw-bolder"><?php echo $_SESSION['username']?>
                         </p>
                         <p class="tx-12 text-muted"></p>
-                        <?php echo $_SESSION['name']?>
                      </div>
                   </div>
                   <ul class="list-unstyled p-1">
